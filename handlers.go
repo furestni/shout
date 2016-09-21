@@ -20,6 +20,7 @@ func listInformation(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "Internal Server Error")
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprintf(w, "%s", out)
 }
 
@@ -44,6 +45,7 @@ func getInformation(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "Internal Server Error while rendering to json")
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprintf(w, "%s", out)
 }
 
@@ -57,6 +59,7 @@ func postInformation(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "Internal Server Error while saving to DB")
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprintf(w, "%d", shoutId)
 }
 
@@ -79,6 +82,7 @@ func updateInformation(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "Internal Server Error while saving to DB")
 		return
 	}
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	fmt.Fprintf(w, "%d", shoutId)
 }
 
