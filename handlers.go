@@ -82,6 +82,11 @@ func updateInformation(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%d", shoutId)
 }
 
+func whoAmI(w http.ResponseWriter, r *http.Request) {
+	user := getUserName(r)
+	fmt.Fprintf(w, "%s", user)
+}
+
 func getBodyAsBytes(body io.ReadCloser) ([]byte, error) {
 	b, err := ioutil.ReadAll(body)
 	if err != nil {

@@ -23,6 +23,7 @@ func main() {
 	r.HandleFunc("/information/", postInformation).Methods("POST")
 	r.HandleFunc("/information/{id}/", getInformation).Methods("GET")
 	r.HandleFunc("/information/{id}/", updateInformation).Methods("PUT")
+	r.HandleFunc("/whoami/", whoAmI).Methods("GET")
 
 	chain := alice.New(
 		RecoverPanic,
