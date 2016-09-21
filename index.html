@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Shout stuff!</title>
+        <link
+            rel="stylesheet"
+            href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+            integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+            crossorigin="anonymous">
+
+        <style>
+
+
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+    width: 100vw;
+    background-color: #ccddff;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.container {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+    width: 100vw;
+}
+
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+    margin-bottom: 10px;
+}
+
+.form-signin .checkbox {
+    font-weight: normal;
+}
+
+.form-signin .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.form-signin .form-control:focus {
+    z-index: 2;
+}
+
+.form-signin input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#messenger {
+    z-index: 20;
+    background-color: #FFF;
+    height: 160px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    -webkit-box-shadow: 0px 0px 53px 5px rgba(0,0,0,0.2);
+       -moz-box-shadow: 0px 0px 53px 5px rgba(0,0,0,0.2);
+            box-shadow: 0px 0px 53px 5px rgba(0,0,0,0.2);
+}
+
+.form-messenger textarea {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    resize: none;
+}
+
+.form-messenger #sendBtn {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#messagesList {
+    padding-top: 15px;
+    z-index: 10;
+    position: fixed;
+    bottom: 160px;
+    left: 0;
+    top: 0;
+    right: 0;
+    overflow: auto;
+}
+
+#actions {
+    min-width: 120px;
+    position: fixed;
+    top: 30px;
+    right: 40px;
+    z-index: 20;
+}
+
+.message {
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 0;
+    padding: 15px;
+    background-color: #FFF;
+    border-radius: 10px;
+    color: #286090;
+    -webkit-box-shadow: 0px 5px 5px 5px rgba(0,0,0,0.02);
+       -moz-box-shadow: 0px 5px 5px 5px rgba(0,0,0,0.02);
+            box-shadow: 0px 5px 5px 5px rgba(0,0,0,0.02);
+}
+
+.msg_info {
+    font-size: small;
+}
+
+.msg_text {
+    font-size: large;
+    margin-bottom: 6px;
+}
+        </style>
+
+    </head>
+
+    <body>
+        <div id="loginForm" class="container">
+            <form class="form-signin">
+                <h2 class="form-signin-heading">Welcome</h2>
+                <label for="inputUsername" class="sr-only">Username</label>
+                <input type="text" id="inputUsername" class="form-control" placeholder="Username" required autofocus>
+                <label for="inputPassword" class="sr-only">Password</label>
+                <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+                <div id="loginBtn" class="btn btn-lg btn-primary btn-block" type="submit">Sign in</div>
+            </form>
+        </div>
+
+        <div id="app" class="container hidden">
+            <div id="messenger">
+                <form class="form-messenger">
+                    <textarea id="msgText" class="form-control" rows="3"></textarea>
+                    <div id="sendBtn" class="btn btn-primary btn-block" type="submit">Shout</div>
+                </form>
+            </div>
+            <div id="actions">
+                <div id="logoutBtn" class="btn btn-primary btn-block">
+                    Logout <span id="whoami" class=""></span>
+                </div>
+            </div>
+            <div id="messagesList">
+
+            </div>
+        </div>
+
+
+        <script
+            src="https://code.jquery.com/jquery-3.1.0.min.js"
+            integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s="
+            crossorigin="anonymous">
+        </script>
+        <script
+            src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+            integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+            crossorigin="anonymous">
+        </script>
+        <script>
+function Shout() {
+	'use strict';
+	this.api = 'http://127.0.0.1:8080/';
+
+    this.user = '';
+    this.pass = '';
+
+	this.debug = false;
+
+    this.loggedIn = false;
+	this.loginPending = false;
+
+    this.sendMessagePending = false;
+
+    this.listMessagesPending = false;
+
+	this.login = function(user, pass, callbackOK, callbackNOK) {
+        if (this.loginPending || this.loggedIn) {
+			return;
+		}
+
+		this.loginPending = true;
+
+        this.user = user;
+        this.pass = pass;
+
+        this.makeRequest(
+			'GET',
+			'whoami/',
+			function(self, response) {
+                callbackOK(self, response);
+                self.loggedIn = true;
+				self.loginPending = false;
+			},
+			function(self, response) {
+                callbackNOK(self, response);
+				self.loginPending = false;
+			},
+			''
+		);
+	};
+
+    this.logout = function(callback) {
+        this.user = '';
+        this.pass = '';
+        this.loggedIn = false;
+        callback(self);
+    };
+
+	this.sendMessage = function(message, callbackOK, callbackNOK) {
+		if (this.sendMessagePending) {
+			return;
+		}
+		this.sendMessagePending = true;
+
+		this.makeRequest(
+			'POST',
+			'information/',
+			function(self, response) {
+				self.sendMessagePending = false;
+                callbackOK(self, response);
+			},
+			function(self, response) {
+				self.sendMessagePending = false;
+                callbackNOK(self, response);
+			},
+			message
+		);
+	};
+
+    this.listMessages = function(callbackOK, callbackNOK) {
+    	if (this.listMessagesPending) {
+			return;
+		}
+		this.listMessagePending = true;
+
+		this.makeRequest(
+			'GET',
+			'information/',
+			function(self, response) {
+				self.listMessagesPending = false;
+                callbackOK(self, response);
+			},
+			function(self, response) {
+				self.listMessagesPending = false;
+                callbackNOK(self, response);
+			},
+			''
+		);
+    };
+
+    this.getMessage = function(msgId, callbackOK, callbackNOK) {
+		this.makeRequest(
+			'GET',
+			'information/' + msgId + '/' ,
+			function(self, response) {
+                callbackOK(self, response);
+			},
+			function(self, response) {
+                callbackNOK(self, response);
+			},
+			''
+		);
+    };
+
+	this.createRequest = function(method, url) {
+		var xhr = new XMLHttpRequest();
+		if ('withCredentials' in xhr) {
+			xhr.open(method, url, true);
+		} else if (typeof XDomainRequest !== 'undefined') {
+			xhr = new XDomainRequest();
+			xhr.open(method, url);
+		} else {
+			xhr = null;
+		}
+        xhr.setRequestHeader("Authorization", "Basic " + Base64.encode(this.user + ":" + this.pass));
+		return xhr;
+	};
+
+	this.makeRequest = function(method, func, callbackOK, callbackNOK, data) {
+		var url = this.api + func;
+		var xhr = this.createRequest(method, url);
+		if (!xhr) {
+			if(this.debug) { console.log('CORS not supported'); }
+			return;
+		}
+
+		var self = this;
+		xhr.onload = function() {
+			if((xhr.status).toString()[0] !== '2') {
+				callbackNOK(self, data);
+			} else {
+				callbackOK(self, xhr.responseText, data);
+			}
+		};
+
+		xhr.onerror = function(){
+			callbackNOK(this, data);
+		};
+
+		xhr.send(data);
+	};
+}
+
+var Base64 = {
+
+// private property
+_keyStr : "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=",
+
+// public method for encoding
+encode : function (input) {
+    var output = "";
+    var chr1, chr2, chr3, enc1, enc2, enc3, enc4;
+    var i = 0;
+
+    input = Base64._utf8_encode(input);
+
+    while (i < input.length) {
+
+        chr1 = input.charCodeAt(i++);
+        chr2 = input.charCodeAt(i++);
+        chr3 = input.charCodeAt(i++);
+
+        enc1 = chr1 >> 2;
+        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
+        enc4 = chr3 & 63;
+
+        if (isNaN(chr2)) {
+            enc3 = enc4 = 64;
+        } else if (isNaN(chr3)) {
+            enc4 = 64;
+        }
+
+        output = output +
+        this._keyStr.charAt(enc1) + this._keyStr.charAt(enc2) +
+        this._keyStr.charAt(enc3) + this._keyStr.charAt(enc4);
+
+    }
+
+    return output;
+},
+
+// public method for decoding
+decode : function (input) {
+    var output = "";
+    var chr1, chr2, chr3;
+    var enc1, enc2, enc3, enc4;
+    var i = 0;
+
+    input = input.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+
+    while (i < input.length) {
+
+        enc1 = this._keyStr.indexOf(input.charAt(i++));
+        enc2 = this._keyStr.indexOf(input.charAt(i++));
+        enc3 = this._keyStr.indexOf(input.charAt(i++));
+        enc4 = this._keyStr.indexOf(input.charAt(i++));
+
+        chr1 = (enc1 << 2) | (enc2 >> 4);
+        chr2 = ((enc2 & 15) << 4) | (enc3 >> 2);
+        chr3 = ((enc3 & 3) << 6) | enc4;
+
+        output = output + String.fromCharCode(chr1);
+
+        if (enc3 != 64) {
+            output = output + String.fromCharCode(chr2);
+        }
+        if (enc4 != 64) {
+            output = output + String.fromCharCode(chr3);
+        }
+
+    }
+
+    output = Base64._utf8_decode(output);
+
+    return output;
+
+},
+
+// private method for UTF-8 encoding
+_utf8_encode : function (string) {
+    string = string.replace(/\r\n/g,"\n");
+    var utftext = "";
+
+    for (var n = 0; n < string.length; n++) {
+
+        var c = string.charCodeAt(n);
+
+        if (c < 128) {
+            utftext += String.fromCharCode(c);
+        }
+        else if((c > 127) && (c < 2048)) {
+            utftext += String.fromCharCode((c >> 6) | 192);
+            utftext += String.fromCharCode((c & 63) | 128);
+        }
+        else {
+            utftext += String.fromCharCode((c >> 12) | 224);
+            utftext += String.fromCharCode(((c >> 6) & 63) | 128);
+            utftext += String.fromCharCode((c & 63) | 128);
+        }
+
+    }
+
+    return utftext;
+},
+
+// private method for UTF-8 decoding
+_utf8_decode : function (utftext) {
+    var string = "";
+    var i = 0;
+    var c = c1 = c2 = 0;
+
+    while ( i < utftext.length ) {
+
+        c = utftext.charCodeAt(i);
+
+        if (c < 128) {
+            string += String.fromCharCode(c);
+            i++;
+        }
+        else if((c > 191) && (c < 224)) {
+            c2 = utftext.charCodeAt(i+1);
+            string += String.fromCharCode(((c & 31) << 6) | (c2 & 63));
+            i += 2;
+        }
+        else {
+            c2 = utftext.charCodeAt(i+1);
+            c3 = utftext.charCodeAt(i+2);
+            string += String.fromCharCode(((c & 15) << 12) | ((c2 & 63) << 6) | (c3 & 63));
+            i += 3;
+        }
+
+    }
+
+    return string;
+}
+
+}
+
+
+        </script>
+        <script>
+            var s = new Shout();
+
+            $('#loginBtn').click(function(){
+                var user = $("#inputUsername").val();
+                var pass = $("#inputPassword").val();
+                s.login(
+                    user,
+                    pass,
+                    function(self, response) {
+                        $("#loginForm").addClass("hidden");
+                        $("#app").removeClass("hidden");
+                        $("#whoami").text(response);
+                        var updateView = function(self) {
+                            self.listMessages(
+                                function(self, response) {
+                                    var list = JSON.parse(response);
+                                    if (list == null) {
+                                        return
+                                    }
+                                    for (var i = 0; i < list.length; i++) {
+                                        self.getMessage(
+                                            list[i],
+                                            function(self, response) {
+                                                var msg = JSON.parse(response);
+                                                var html = '<div class="message" id="message_' + msg.id + '">'
+                                                html = html + '<div class="msg_text">' + msg.message + '</div>'
+                                                html = html + '<div class="msg_info">'
+                                                html = html + 'message id: <span class="msg_id">' + msg.id + '</span> | '
+                                                html = html + 'posted by: <span class="msg_auth">' + msg.user + '</span> | '
+                                                html = html + 'date: <span class="msg_date">' + msg.date + '</span> '
+                                                html = html + '</div>'
+                                                html = html + '</div></div></br>'
+                                                $('#messagesList').append(html);
+                                                var element = document.getElementById('messagesList');
+                                                element.scrollTop = element.scrollHeight;
+                                            },
+                                            function(self, response) {
+                                                console.log('nok');
+                                            }
+                                        );
+                                    }
+                                },
+                                function(self, response) {
+                                    console.log('nok');
+                                }
+                            );
+                        };
+                        updateView(self);
+                    },
+                    function(self, response) {
+                        console.log('nok');
+                    }
+                );
+            });
+
+            $('#logoutBtn').click(function(){
+                s.logout(
+                    function(self) {
+                        $("#loginForm").removeClass("hidden");
+                        $("#app").addClass("hidden");
+                        $('#messagesList').empty();
+                    }
+                );
+            });
+
+            $('#sendBtn').click(function(){
+                var msg = $("#msgText").val();
+                s.sendMessage(
+                    msg,
+                    function(self, response) {
+                        var msgId = JSON.parse(response);
+                        self.getMessage(
+                            msgId,
+                            function(self, response) {
+                                var msg = JSON.parse(response);
+                                var html = '<div class="message" id="message_' + msg.id + '">'
+                                html = html + '<div class="msg_text">' + msg.message + '</div>'
+                                html = html + '<div class="msg_info">'
+                                html = html + 'message id: <span class="msg_id">' + msg.id + '</span> | '
+                                html = html + 'posted by: <span class="msg_auth">' + msg.user + '</span> | '
+                                html = html + 'date: <span class="msg_date">' + msg.date + '</span> '
+                                html = html + '</div>'
+                                html = html + '</div></div></br>'
+                                $('#messagesList').append(html);
+                                var element = document.getElementById('messagesList');
+                                element.scrollTop = element.scrollHeight;
+                            },
+                            function(self, response) {
+                                console.log('nok');
+                            }
+                        );
+                    },
+                    function(self, response) {
+                        console.log('nok');
+                    }
+                );
+            });
+        </script>
+    </body>
+</html>
