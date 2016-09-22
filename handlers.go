@@ -9,6 +9,7 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"github.com/unrolled/render"
 )
 
 func listInformation(w http.ResponseWriter, r *http.Request) {
@@ -89,6 +90,20 @@ func updateInformation(w http.ResponseWriter, r *http.Request) {
 func whoAmI(w http.ResponseWriter, r *http.Request) {
 	user := getUserName(r)
 	fmt.Fprintf(w, "%s", user)
+}
+
+func renderUI(w http.ResponseWriter, r *http.Request) {
+	ren := render.New(render.Options{
+		Directory: "assets",
+		Asset: func(name string) ([]byte, error) {
+			return Asset(name)
+		},
+		AssetNames: func() []string {
+			return []string{"assets/index.tmpl"}
+		},
+		Delims: render.Delims{"[[[", "]]]"},
+	})
+	ren.HTML(w, http.StatusOK, "index", config)
 }
 
 func getBodyAsBytes(body io.ReadCloser) ([]byte, error) {
