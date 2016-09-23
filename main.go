@@ -50,6 +50,9 @@ func main() {
 	r.HandleFunc("/api/information/{id}/", updateInformation).Methods("PUT")
 	r.HandleFunc("/api/whoami/", whoAmI).Methods("GET")
 	r.HandleFunc("/ui/", renderUI).Methods("GET")
+	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		http.Redirect(w, r, "/ui/", 301)
+	}).Methods("GET")
 
 	chain := alice.New(
 		RecoverPanic,
