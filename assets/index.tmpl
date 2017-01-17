@@ -304,6 +304,20 @@ function Shout() {
 		);
     };
 
+    this.deleteMessage = function(msgId, callbackOK, callbackNOK) {
+                this.makeRequest(
+                        'DELETE',
+                        'information/' + msgId + '/' ,
+                        function(self, response) {
+                callbackOK(self, response);
+                        },
+                        function(self, response) {
+                callbackNOK(self, response);
+                        },
+                        ''
+                );
+    };
+
 	this.createRequest = function(method, url) {
 		var xhr = new XMLHttpRequest();
 		if ('withCredentials' in xhr) {
@@ -512,11 +526,23 @@ _utf8_decode : function (utftext) {
                                                 html = html + 'message id: <span class="msg_id">' + msg.id + '</span> | '
                                                 html = html + 'posted by: <span class="msg_auth">' + msg.user + '</span> | '
                                                 html = html + 'date: <span class="msg_date">' + msg.date + '</span> '
+                                                html = html + '<form class="form-messenger">'
+                                                html = html + '<div id="removeBtn_' + msg.id + '" class="btn btn-primary btn-block" type="submit">Remove</div>'
+                                                html = html + '</form>'
+
                                                 html = html + '</div>'
                                                 html = html + '</div></div></br>'
                                                 $('#messagesList').append(html);
                                                 var element = document.getElementById('messagesList');
                                                 element.scrollTop = element.scrollHeight;
+              					$('#removeBtn_' + msg.id).click(function(){
+                                		        s.deleteMessage(msg.id);
+       						        console.log('Remove ' + msg.id);
+		                                        $(this).parent().parent().parent().remove();
+
+
+
+          					 });
                                             },
                                             function(self, response) {
                                                 console.log('nok');
@@ -563,14 +589,25 @@ _utf8_decode : function (utftext) {
                                 html = html + 'message id: <span class="msg_id">' + msg.id + '</span> | '
                                 html = html + 'posted by: <span class="msg_auth">' + msg.user + '</span> | '
                                 html = html + 'date: <span class="msg_date">' + msg.date + '</span> '
+                                html = html + '<form class="form-messenger">'
+                                html = html + '<div id="removeBtn_' + msg.id + '" class="btn btn-primary btn-block" type="submit">Remove</div>'
+                                html = html + '</form>'
+
                                 html = html + '</div>'
                                 html = html + '</div></div></br>'
                                 $('#messagesList').append(html);
                                 var element = document.getElementById('messagesList');
                                 element.scrollTop = element.scrollHeight;
+                                $('#removeBtn_' + msg.id).click(function(){
+					s.deleteMessage(msg.id)
+                               		console.log('Remove ' + msg.id);
+					$(this).parent().parent().parent().remove();
+
+                               });
                             },
                             function(self, response) {
                                 console.log('nok');
+
                             }
                         );
                     },
@@ -579,6 +616,7 @@ _utf8_decode : function (utftext) {
                     }
                 );
             });
+
         </script>
     </body>
 </html>

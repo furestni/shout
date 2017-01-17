@@ -87,6 +87,28 @@ func updateInformation(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "%d", shoutId)
 }
 
+func deleteInformation(w http.ResponseWriter, r *http.Request) {
+        vars := mux.Vars(r)
+        id := vars["id"]
+        shoutId, err := strconv.ParseUint(id, 10, 64)
+        if err != nil {
+                w.WriteHeader(http.StatusInternalServerError)
+                fmt.Fprint(w, "Internal Server Error while parsing ID")
+                return
+        }
+
+        shoutId, err = shouts.Delete(shoutId)
+        if err != nil {
+                w.WriteHeader(http.StatusInternalServerError)
+                fmt.Fprint(w, "Internal Server Error while deleting from DB")
+                return
+        }
+        w.Header().Set("Content-Type", "application/json; charset=utf-8")
+        fmt.Fprintf(w, "%d", shoutId)
+
+}
+
+
 func whoAmI(w http.ResponseWriter, r *http.Request) {
 	user := getUserName(r)
 	fmt.Fprintf(w, "%s", user)

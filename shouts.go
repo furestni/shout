@@ -104,6 +104,16 @@ func (s Shouts) Get(id uint64) (Shout, error) {
 	return shout, nil
 }
 
+func (s Shouts) Delete(id uint64) (uint64, error) {
+        err := s.db.Update(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte(bucketName))
+                idb := itob(id)
+                return b.Delete(idb)
+	})
+        return id, err
+}
+
+
 func itob(v uint64) []byte {
 	b := make([]byte, 8)
 	binary.BigEndian.PutUint64(b, v)

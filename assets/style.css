@@ -1,0 +1,140 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+    width: 100vw;
+    background-color: #ccddff;
+}
+
+.hidden {
+    visibility: hidden;
+}
+
+.container {
+    padding: 0;
+    margin: 0;
+    height: 100vh;
+    width: 100%;
+    width: 100vw;
+}
+
+.form-signin {
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
+}
+
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+    margin-bottom: 10px;
+}
+
+.form-signin .checkbox {
+    font-weight: normal;
+}
+
+.form-signin .form-control {
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.form-signin .form-control:focus {
+    z-index: 2;
+}
+
+.form-signin input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-signin input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#messenger {
+    z-index: 20;
+    background-color: #FFF;
+    height: 160px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    margin: 0;
+    padding: 20px;
+    padding-left: 20%;
+    padding-right: 20%;
+    -webkit-box-shadow: 0px 0px 53px 5px rgba(0,0,0,0.2);
+       -moz-box-shadow: 0px 0px 53px 5px rgba(0,0,0,0.2);
+            box-shadow: 0px 0px 53px 5px rgba(0,0,0,0.2);
+}
+
+.form-messenger {
+    padding-right: 15px;
+}
+
+.form-messenger textarea {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+    resize: none;
+}
+
+.form-messenger #sendBtn {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+#messagesList {
+    padding-top: 30px;
+    z-index: 10;
+    position: fixed;
+    bottom: 160px;
+    left: 0;
+    top: 0;
+    right: 0;
+    overflow: auto;
+    padding-left: 20%;
+    padding-right: 20%;
+}
+
+#actions {
+    min-width: 120px;
+    position: fixed;
+    top: 30px;
+    right: 40px;
+    z-index: 20;
+}
+
+.message {
+    margin-top: 0;
+    padding: 15px;
+    background-color: #FFF;
+    border-radius: 10px;
+    color: #286090;
+    -webkit-box-shadow: 0px 5px 5px 5px rgba(0,0,0,0.02);
+       -moz-box-shadow: 0px 5px 5px 5px rgba(0,0,0,0.02);
+            box-shadow: 0px 5px 5px 5px rgba(0,0,0,0.02);
+}
+
+.msg_info {
+    font-size: small;
+}
+
+.msg_text {
+    font-size: large;
+    margin-bottom: 6px;
+}

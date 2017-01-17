@@ -27,7 +27,7 @@ var config configuration
 
 func init() {
 	env.Var(&config.Listener, "LISTENER", "0.0.0.0:8080", "Address/port to bind to")
-	env.Var(&config.API, "API", "http://127.0.0.1:8080/api/", "Base URL where the API is reachable public")
+	env.Var(&config.API, "API", "http://dashing.stxt.media.int:8080/api/", "Base URL where the API is reachable public")
 	env.Var(&config.DB, "DB", "./shouts.db", "Path to database file")
 }
 
@@ -48,11 +48,9 @@ func main() {
 	r.HandleFunc("/api/information/", postInformation).Methods("POST")
 	r.HandleFunc("/api/information/{id}/", getInformation).Methods("GET")
 	r.HandleFunc("/api/information/{id}/", updateInformation).Methods("PUT")
+        r.HandleFunc("/api/information/{id}/", deleteInformation).Methods("DELETE")
 	r.HandleFunc("/api/whoami/", whoAmI).Methods("GET")
 	r.HandleFunc("/ui/", renderUI).Methods("GET")
-	r.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		http.Redirect(w, r, "/ui/", 301)
-	}).Methods("GET")
 
 	chain := alice.New(
 		RecoverPanic,
