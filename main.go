@@ -26,8 +26,8 @@ func (c configuration) String() string {
 var config configuration
 
 func init() {
-	env.Var(&config.Listener, "LISTENER", "0.0.0.0:8080", "Address/port to bind to")
-	env.Var(&config.API, "API", "http://dashing.stxt.media.int:8080/api/", "Base URL where the API is reachable public")
+	env.Var(&config.Listener, "LISTENER", "0.0.0.0:8088", "Address/port to bind to")
+	env.Var(&config.API, "API", "http://dashing.stxt.media.int:8088/api/", "Base URL where the API is reachable public")
 	env.Var(&config.DB, "DB", "./shouts.db", "Path to database file")
 }
 
